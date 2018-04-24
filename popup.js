@@ -1,11 +1,30 @@
-// var app = chrome.runtime.getBackgroundPage();
+document.addEventListener("DOMContentLoaded", (event) => {
 
-var insstatus = "status";
-var value = true;
-localStorage.setItem (insstatus,value);
-document.getElementById('clickme').addEventListener('click', function(){
-    chrome.tabs.executeScript({
-      file: 'content.js'
-    }); 
-  }
-);
+	var port = chrome.extension.connect({
+		name: "QaExtentionPort"
+	});
+
+	port.onMessage.addListener(function(msg) {
+		if(msg == "on"){
+			document.getElementById("myonoffswitch").checked = true;
+		}
+		else if(msg == "off"){
+			document.getElementById("myonoffswitch").checked = false;
+		}
+	});
+
+	function onSwitch(){
+		if(document.getElementById("myonoffswitch").checked){
+			port.postMessage("on");
+		}
+		else{
+			port.postMessage("off");
+		}
+
+		setTimeout(function(){
+			window.close();
+		}, 50);
+	}
+
+	document.getElementById('myonoffswitch').addEventListener('change', onSwitch);
+});

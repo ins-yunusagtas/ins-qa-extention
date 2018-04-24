@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
 
-  "name": "Click to execute",
-  "description": "Execute script after click in popup.html (chrome extension) http://stackoverflow.com/questions/20764517/execute-script-after-click-in-popup-html-chrome-extension.",
+  "name": "Insider QA System Rules Checker",
+  "description": "Insider QA System Rules Checker",
   "version": "1.0",
 
   "icons": {
@@ -10,22 +10,30 @@
   },
 
   "permissions": [
-         "tabs",
-         "http://*/*",
-         "https://*/*"
-     ],
+    "storage",
+    "declarativeContent",
+    "tabs",
+    "http://*/*",
+    "https://*/*"
+  ],
 
-  "browser_action": {
+  "background": {
+      "scripts": ["background.js"],
+      "persistent": false
+  },
+
+  "page_action": {
     "default_icon": "icon.png",
     "default_popup": "popup.html"
   },
-       "content_scripts": [{
-         "matches": [
-             "http://*/*",
-             "https://*/*"
-         ],
-         "js": ["content.js"],
-         "run_at": "document_end" // pay attention to this line
-     }],
-  "web_accessible_resources": ["systemrulechecker.js","content.js"]
+
+  "content_scripts": [{
+     "matches": [
+         "http://*/*",
+         "https://*/*"
+     ],
+     "js": ["content.js"],
+     "run_at": "document_end"
+  }],
+  "web_accessible_resources": ["systemrulechecker.js", "content.js"]
 }

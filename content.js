@@ -5,7 +5,21 @@ var injectScript = function (file, node) {
     s.setAttribute('src', file);
     th.appendChild(s);
 }
-if (document.readyState === "complete") {
-	console.log("1211312");
-    injectScript(chrome.extension.getURL('systemrulechecker.js'), 'body');
+
+var injectQAScript = function (){
+	injectScript(chrome.extension.getURL('systemrulechecker.js'), 'body')
 }
+
+var port = chrome.extension.connect({
+    name: "QaExtentionPort"
+});
+
+port.onMessage.addListener(function(msg) {
+    if(msg == "on"){
+        document.addEventListener(
+			'DOMContentLoaded', 
+			injectQAScript(), 
+			false
+    	);
+    }
+});
