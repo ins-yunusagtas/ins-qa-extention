@@ -1,16 +1,21 @@
-window.onload = (function() {
-	
+(function() {
+
     self.run = function()
     {
-		
-        if (location.href.indexOf('sociaplus.com') == -1 && location.href.indexOf('inone.useinsider.com') == -1 && typeof spApi != 'undefined')
-        {
-			console.log("SYSTEM CHECKER START WORKING");
-					
-            console.log("checking page_rules");
-            self.page_rules();
-        }
-    }
+		var waitForApiInit = setInterval(function(){
+			if (self.checkApiInit()){
+				clearInterval(waitForApiInit);
+				console.log("%c-- SYSTEM RULES CHECKER START --", "background: #343434; color: #F6F6F6");
+			    self.page_rules();
+			    console.log("%c-- SYSTEM RULES CHECKER END --", "background: #343434; color: #F6F6F6");
+			}
+		}, 200);
+      
+    };
+
+    self.checkApiInit = function(){
+    	return location.href.indexOf('sociaplus.com') == -1 && location.href.indexOf('inone.useinsider.com') == -1 && typeof spApi != 'undefined' && spApi.inited;
+    };
 
 	// isOnPage
 	self.isOnPage = function() {
@@ -295,6 +300,7 @@ window.onload = (function() {
 	//----------------------------------------MAIN--------------------------------------------------
     self.page_rules = function()
     {
+    	console.log("checking page_rules");
     	// Main Page
         if (spApi.isOnMainPage()) {
 			console.log('%c-------MainPageControls-------', 'color:red; font-weight:bold;');
